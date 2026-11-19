@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATITHIQ | Super Admin Login</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#101b35,#243b62);
+  color:#18243a;padding:20px
+}
+.login-card{
+  width:100%;max-width:420px;background:#fff;
+  padding:38px;border-radius:20px;
+  box-shadow:0 20px 60px #0005
+}
+.logo{text-align:center;margin-bottom:30px}
+.logo-mark{
+  width:55px;height:55px;border-radius:16px;
+  background:#c7a45b;color:#142338;
+  display:grid;place-items:center;
+  margin:auto;font-size:28px;font-weight:bold
+}
+h1{font-size:25px;margin:14px 0 5px}
+.subtitle{color:#718096;font-size:13px}
+label{display:block;margin:20px 0 7px;font-size:13px;font-weight:bold}
+input{
+  width:100%;padding:13px;border:1px solid #dce2ea;
+  border-radius:9px;font-size:15px
+}
+button{
+  width:100%;padding:14px;margin-top:24px;
+  background:#172b4d;color:white;border:0;
+  border-radius:9px;font-size:15px;font-weight:bold;
+  cursor:pointer
+}
+button:disabled{opacity:.6;cursor:wait}
+#message{font-size:13px;margin-top:15px;line-height:1.5}
+.footer{text-align:center;color:#8792a3;font-size:11px;margin-top:25px}
+</style>
+</head>
+<body>
+<div class="login-card">
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <h1>ATITHIQ</h1>
+    <div class="subtitle">HOSPITALITY CLOUD</div>
+  </div>
+
+  <h2>Super Admin Login</h2>
+  <p class="subtitle">Sign in to manage your hospitality network.</p>
+
+  <form id="loginForm">
+    <label for="email">Email Address</label>
+    <input id="email" type="email" required autocomplete="username">
+
+    <label for="password">Password</label>
+    <input id="password" type="password" required autocomplete="current-password">
+
+    <button id="loginButton" type="submit">Sign In</button>
+    <div id="message" role="status"></div>
+  </form>
+
+  <div class="footer">ATITHIQ © 2026 · Secure Admin Portal</div>
+</div>
+
+<script type="module">
+import { adminLogin } from "./auth.js";
+
+const form = document.getElementById("loginForm");
+const button = document.getElementById("loginButton");
+const message = document.getElementById("message");
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  button.disabled = true;
+  message.textContent = "Signing in...";
+
+  try {
+    await adminLogin(
+      document.getElementById("email").value.trim(),
+      document.getElementById("password").value
+    );
+
+    message.textContent = "Login successful. Opening dashboard...";
+    window.location.href = "./index.html";
+  } catch (error) {
+    console.error(error);
+    message.textContent = "Login failed. Check your details and admin access.";
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
