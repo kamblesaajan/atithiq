@@ -241,6 +241,14 @@ document.getElementById("refresh").addEventListener("click",loadHotels);
   document.getElementById("addHotel").addEventListener("click", () => {
   document.getElementById("hotelRegistration").style.display = "block";
 });
+  const params = new URLSearchParams(window.location.search);
+
+if (params.get("add") === "1") {
+  document.getElementById("hotelRegistration").style.display = "block";
+  document.getElementById("hotelRegistration").scrollIntoView({
+    behavior: "smooth"
+  });
+}
 </script>
 </body>
 </html>
