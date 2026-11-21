@@ -94,6 +94,42 @@ button{background:#203b63;color:white;border:0;padding:11px 16px;border-radius:8
       </table>
     </div>
   </section>
+<section id="hotelRegistration" class="panel" style="display:none">
+  <h2>Register New Hotel</h2>
+  <p class="muted">Enter hotel and owner details</p>
+
+  <form id="hotelRegistrationForm">
+    <label>Hotel / Restaurant Name</label>
+    <input id="hotelName" required>
+
+    <label>Owner Name</label>
+    <input id="ownerName" required>
+
+    <label>Email Address</label>
+    <input id="ownerEmail" type="email" required>
+
+    <label>Mobile Number</label>
+    <input id="ownerPhone" type="tel" required>
+
+    <label>City</label>
+    <input id="hotelCity" required>
+
+    <label>Full Address</label>
+    <textarea id="hotelAddress" required></textarea>
+
+    <label>Subscription Plan</label>
+    <select id="hotelPlan">
+      <option value="starter">Starter</option>
+      <option value="professional">Professional</option>
+      <option value="business">Business</option>
+    </select>
+
+    <p>Free Trial: 30 Days after Super Admin approval</p>
+
+    <button type="submit">Submit Registration</button>
+    <button type="button" onclick="document.getElementById('hotelRegistration').style.display='none'">Cancel</button>
+  </form>
+</section>
 </main>
 
 <script type="module">
@@ -202,6 +238,9 @@ onAuthStateChanged(auth, async user => {
 
 search.addEventListener("input",render);
 document.getElementById("refresh").addEventListener("click",loadHotels);
+  document.getElementById("addHotel").addEventListener("click", () => {
+  document.getElementById("hotelRegistration").style.display = "block";
+});
 </script>
 </body>
 </html>
