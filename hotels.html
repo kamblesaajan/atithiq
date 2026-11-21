@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATITHIQ | Hotels Management</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f6fa;color:#202b3c}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:#17243b;color:white;padding:25px 16px}
+.brand{font-size:22px;font-weight:bold;margin-bottom:40px}
+.brand small{display:block;font-size:10px;letter-spacing:2px;margin-top:5px;color:#b8c4d8}
+.nav a{display:block;color:#d7deea;text-decoration:none;padding:13px;margin:7px 0;border-radius:8px}
+.nav a.active,.nav a:hover{background:#30466b;color:white}
+.main{margin-left:220px;padding:30px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-size:28px}
+.muted{color:#758197;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:25px 0}
+.card,.panel{background:white;border:1px solid #e8ebf1;border-radius:13px;padding:20px}
+.card span{color:#788398;font-size:13px}
+.card strong{display:block;font-size:28px;margin-top:10px}
+.panel{margin-top:20px}
+.tools{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0}
+input{padding:12px;border:1px solid #dce1e9;border-radius:8px;min-width:220px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:15px 10px;border-bottom:1px solid #edf0f4;font-size:13px}
+th{color:#788398;font-weight:600}
+.status{padding:5px 10px;border-radius:20px;background:#e8f7ee;color:#21834a;font-size:12px}
+.error{color:#b42318}
+button{background:#203b63;color:white;border:0;padding:11px 16px;border-radius:8px;cursor:pointer}
+@media(max-width:700px){
+.sidebar{position:relative;width:100%;padding:15px}
+.brand{margin-bottom:12px}
+.nav{display:flex;flex-wrap:wrap}
+.nav a{padding:9px}
+.main{margin:0;padding:16px}
+.stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<aside class="sidebar">
+  <div class="brand">ATITHIQ<small>HOSPITALITY CLOUD</small></div>
+  <nav class="nav">
+    <a href="./index.html">Overview</a>
+    <a class="active" href="./hotels.html">Hotels</a>
+    <a href="./index.html">Subscriptions</a>
+    <a href="./index.html">Payments</a>
+    <a href="./index.html">Users &amp; Roles</a>
+    <a href="./index.html">Reports</a>
+    <a href="./index.html">Settings</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <div class="top">
+    <div>
+      <p class="muted">ATITHIQ / Hotels</p>
+      <h1>Hotels Management</h1>
+      <p class="muted">Manage registered hotels in your network</p>
+    </div>
+    <a href="./index.html"><button>← Back to Overview</button></a>
+  </div>
+
+  <section class="stats">
+    <div class="card"><span>Total Hotels</span><strong id="total">—</strong></div>
+    <div class="card"><span>Active Hotels</span><strong id="active">—</strong></div>
+    <div class="card"><span>Trial Hotels</span><strong id="trial">—</strong></div>
+  </section>
+
+  <section class="panel">
+    <h3>Registered Hotels</h3>
+    <div class="tools">
+      <input id="search" placeholder="Search hotel name or location...">
+      <button id="refresh">Refresh Data</button>
+    </div>
+    <p id="message" class="muted">Checking Super Admin access...</p>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>HOTEL NAME</th>
+            <th>LOCATION</th>
+            <th>PLAN</th>
+            <th>STATUS</th>
+            <th>JOINED</th>
+          </tr>
+        </thead>
+        <tbody id="hotelRows"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+import {auth, db} from "./firebase-config.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+
+import {
+  collection, getDocs, doc, getDoc
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+const message = document.getElementById("message");
+const rows = document.getElementById("hotelRows");
+const search = document.getElementById("search");
+
+let hotels = [];
+
+function safe(value){
+  return String(value ?? "—").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function dateText(value){
+  if(!value) return "—";
+  const date = value.toDate ? value.toDate() : new Date(value);
+  return isNaN(date.getTime()) ? "—" : date.toLocaleDateString("en-IN");
+}
+
+function render(){
+  const term = search.value.trim().toLowerCase();
+  const filtered = hotels.filter(h =>
+    String(h.hotelName || "").toLowerCase().includes(term) ||
+    String(h.location || h.city || "").toLowerCase().includes(term)
+  );
+
+  rows.innerHTML = "";
+
+  if(!filtered.length){
+    rows.innerHTML = '<tr><td colspan="5">No matching hotels found.</td></tr>';
+    return;
+  }
+
+  filtered.forEach(h => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><strong>${safe(h.hotelName)}</strong></td>
+      <td>${safe(h.location || h.city || "—")}</td>
+      <td>${safe(h.plan)}</td>
+      <td><span class="status">${safe(h.status)}</span></td>
+      <td>${safe(dateText(h.createdAt))}</td>
+    `;
+    rows.appendChild(tr);
+  });
+}
+
+async function loadHotels(){
+  message.textContent = "Loading hotel records...";
+  rows.innerHTML = "";
+
+  try{
+    const snapshot = await getDocs(collection(db,"hotels"));
+    hotels = snapshot.docs.map(d => ({id:d.id,...d.data()}));
+
+    document.getElementById("total").textContent = hotels.length;
+    document.getElementById("active").textContent =
+      hotels.filter(h => String(h.status).toLowerCase() === "active").length;
+    document.getElementById("trial").textContent =
+      hotels.filter(h => String(h.status).toLowerCase() === "trial").length;
+
+    render();
+    message.textContent = "Hotel records loaded from Firebase.";
+  }catch(error){
+    console.error(error);
+    message.textContent = "Unable to load hotel records: " + error.message;
+    message.className = "error";
+  }
+}
+
+onAuthStateChanged(auth, async user => {
+  if(!user){
+    message.textContent = "Please sign in as Super Admin first. Return to Overview and log in.";
+    return;
+  }
+
+  try{
+    const adminRef = doc(db,"superAdmins",user.uid);
+    const adminSnap = await getDoc(adminRef);
+
+    if(!adminSnap.exists() ||
+       adminSnap.data().active !== true ||
+       adminSnap.data().role !== "super_admin"){
+      message.textContent = "Super Admin access denied.";
+      return;
+    }
+
+    await loadHotels();
+  }catch(error){
+    console.error(error);
+    message.textContent = "Access check failed: " + error.message;
+    message.className = "error";
+  }
+});
+
+search.addEventListener("input",render);
+document.getElementById("refresh").addEventListener("click",loadHotels);
+</script>
+</body>
+</html>
