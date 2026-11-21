@@ -24,7 +24,13 @@ export async function adminLogin(email, password) {
   try {
     const adminRef = doc(db, "superAdmins", user.uid);
     const adminSnap = await getDoc(adminRef);
-    console.log("ADMIN CHECK:", adminSnap.exists(), adminSnap.data());
+    console.log("ADMIN VALUES:", {
+  uid: user.uid,
+  active: adminSnap.data()?.active,
+  role: adminSnap.data()?.role,
+  activeOK: adminSnap.data()?.active === true,
+  roleOK: adminSnap.data()?.role === "super_admin"
+});
     if (
       !adminSnap.exists() ||
       adminSnap.data().active !== true ||
