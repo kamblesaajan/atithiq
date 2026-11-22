@@ -30,7 +30,12 @@
  <div class="navtitle" data-t="workspace">WORKSPACE</div><nav class="nav" id="nav">
  <button class="active" data-page="overview"><span class="navicon">▦</span><span data-t="overview">Overview</span></button>
  <button data-page="hotels"><span class="navicon">⌂</span><span data-t="hotels">Hotels</span></button>
-  <a href="./hotels.html?add=1" style="display:block;margin:8px 0 8px 32px;padding:9px 12px;color:#c7a46b;text-decoration:none;font-size:13px;border-radius:8px;">+ Add New Hotel</a>
+  <button type="button" id="addHotelNav"
+style="margin:4px 0 8px 32px;padding:9px 12px;
+background:none;border:0;color:#c7a46b;
+text-align:left;font-size:13px;cursor:pointer;">
++ Add New Hotel
+</button>
  <button data-page="subscriptions"><span class="navicon">◈</span><span data-t="subscriptions">Subscriptions</span></button>
  <button data-page="payments"><span class="navicon">₹</span><span data-t="payments">Payments</span></button></nav>
  <div class="navtitle" data-t="management">MANAGEMENT</div><nav class="nav">
@@ -57,6 +62,57 @@
  <div class="card tablepanel"><div class="panelhead"><div><h2 data-t="recent">Recently Added Hotels</h2><div class="muted" style="margin-top:5px" data-t="recentSub">Latest properties registered on ATITHIQ</div></div><button class="ghost" id="viewAll" data-t="viewAll">View all hotels →</button></div>
  <div class="tablewrap"><table><thead><tr><th data-t="hotelName">HOTEL NAME</th><th data-t="location">LOCATION</th><th data-t="plan">PLAN</th><th data-t="status">STATUS</th><th data-t="joined">JOINED</th><th></th></tr></thead><tbody id="hotelRows"></tbody></table></div><div class="hotelcards" id="hotelCards"></div>
  </div><div class="footer">© 2026 ATITHIQ Hospitality Cloud · UI prototype with illustrative demo data</div>
+ <section class="content" id="hotelsPage" style="display:none">
+  <div class="heading">
+    <div>
+      <div class="eyebrow">SUPER ADMIN CONSOLE</div>
+      <h1>Hotels Management</h1>
+      <div class="subtitle">Manage all registered hotels in your network.</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="card stat">
+      <div class="stathead">Total Hotels</div>
+      <div class="value" id="hotelTotal">0</div>
+    </div>
+    <div class="card stat">
+      <div class="stathead">Active Hotels</div>
+      <div class="value" id="hotelActive">0</div>
+    </div>
+    <div class="card stat">
+      <div class="stathead">Trial Hotels</div>
+      <div class="value" id="hotelTrial">0</div>
+    </div>
+    <div class="card stat">
+      <div class="stathead">Expired Hotels</div>
+      <div class="value" id="hotelExpired">0</div>
+    </div>
+  </div>
+
+  <div class="card tablepanel">
+    <div class="panelhead">
+      <h2>Registered Hotels</h2>
+      <button class="ghost" id="hotelRefresh">Refresh Data</button>
+    </div>
+    <input id="hotelSearch" placeholder="Search hotel name or location..."
+      style="padding:11px;border:1px solid #e7ebf0;border-radius:8px;width:100%;margin-bottom:15px">
+    <div class="tablewrap" style="display:block">
+      <table>
+        <thead>
+          <tr>
+            <th>HOTEL NAME</th>
+            <th>LOCATION</th>
+            <th>PLAN</th>
+            <th>STATUS</th>
+            <th>JOINED</th>
+          </tr>
+        </thead>
+        <tbody id="managedHotelRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 </section></main></div>
 <div class="modalback" id="modalback"><div class="modal" role="dialog" aria-modal="true"><h2 data-t="register">Register a hotel</h2><p data-t="modalNote">Demo only: this entry stays in this page session. Backend registration comes in a later phase.</p><form id="form"><div class="field"><label data-t="hotelLabel" for="hotelInput">Hotel / Restaurant name</label><input id="hotelInput" required maxlength="70" placeholder="e.g. Royal Stay"></div><div class="field"><label data-t="cityLabel" for="cityInput">City</label><input id="cityInput" required maxlength="50" placeholder="e.g. Pune"></div><div class="field"><label data-t="planLabel" for="planInput">Subscription plan</label><select id="planInput"><option>Starter</option><option>Professional</option><option>Business</option><option>Enterprise</option></select></div><div class="modalactions"><button type="button" class="ghost" id="cancel" data-t="cancel">Cancel</button><button class="primary" type="submit" data-t="add">Add hotel</button></div></form></div></div><div class="toast" id="toast" role="status"></div>
 <script>
@@ -77,15 +133,12 @@ function renderHotels(){$("hotelRows").replaceChildren();$("hotelCards").replace
 let card=document.createElement("div");card.className="hotelcard";let top=document.createElement("div");top.className="hotelcardtop";let hinfo=wrap.cloneNode(true);let sb=document.createElement("span");sb.className="status "+h.status.toLowerCase();sb.textContent=h.status;top.append(hinfo,sb);let meta=document.createElement("div");meta.className="hotelcardmeta";[[t("location"),h.location],[t("plan"),h.plan],[t("joined"),h.joined],["ID",h.id]].forEach(([label,value])=>{let m=document.createElement("div");m.className="meta";let l=document.createElement("label"),v=document.createElement("b");l.textContent=label;v.textContent=value;m.append(l,v);meta.append(m)});card.append(top,meta);$("hotelCards").append(card)})}
 function applyLang(){document.documentElement.lang=lang;document.querySelectorAll("[data-t]").forEach(el=>{let k=el.dataset.t;el.textContent=t(k)});$("crumb").textContent=t("overview");renderHotels()}
 $("lang").onchange=e=>{lang=e.target.value;applyLang()};
-$("addHotel").onclick=()=>{
-  window.location.href="./hotels.html";
+$("addHotelNav").onclick=()=>{
+  document.querySelector('[data-page="hotels"]').click();
 };
 $("form").onsubmit=e=>{e.preventDefault();let name=$("hotelInput").value.trim(),city=$("cityInput").value.trim();if(!name||!city)return;hotels.unshift({name,id:"DEMO-"+String(hotels.length+1).padStart(3,"0"),location:city,plan:$("planInput").value,status:"Trial",joined:t("joinedToday"),initial:name.charAt(0).toUpperCase()});$("total").textContent=Number($("total").textContent)+1;$("trials").textContent=Number($("trials").textContent)+1;renderHotels();$("form").reset();$("modalback").classList.remove("show");toast("Demo hotel added. Not saved to a server.")};
 $("menuBtn").onclick=()=>{ $("sidebar").classList.toggle("open");$("overlay").classList.toggle("show")};$("overlay").onclick=()=>{$("sidebar").classList.remove("open");$("overlay").classList.remove("show")};
-document.querySelectorAll("#nav button").forEach(btn=>btn.onclick=()=>{document.querySelectorAll("#nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");let page=btn.dataset.page;if(page==="hotels"){
-  window.location.href="./hotels.html";
-  return;
-}$("crumb").textContent=btn.innerText.trim();$("sidebar").classList.remove("open");$("overlay").classList.remove("show");if(page!=="overview")toast(btn.innerText.trim()+" module will be built in the next phase.")});
+document.querySelectorAll("#nav button").forEach(btn=>btn.onclick=()=>{document.querySelectorAll("#nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");let page=btn.dataset.page;$("crumb").textContent=btn.innerText.trim();$("sidebar").classList.remove("open");$("overlay").classList.remove("show");if(page!=="overview")toast(btn.innerText.trim()+" module will be built in the next phase.")});
 $("viewAll").onclick=()=>{document.querySelector('[data-page="hotels"]').click()};$("help").onclick=()=>toast("ATITHIQ Phase 1 prototype. Help centre is planned for a later phase.");
 renderHotels();
 </script>
