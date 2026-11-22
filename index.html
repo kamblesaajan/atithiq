@@ -138,6 +138,11 @@ $("addHotelNav").onclick=()=>{
   document.querySelector('[data-page="hotels"]').click();
 };
 $("form").onsubmit=e=>{e.preventDefault();let name=$("hotelInput").value.trim(),city=$("cityInput").value.trim();if(!name||!city)return;hotels.unshift({name,id:"DEMO-"+String(hotels.length+1).padStart(3,"0"),location:city,plan:$("planInput").value,status:"Trial",joined:t("joinedToday"),initial:name.charAt(0).toUpperCase()});$("total").textContent=Number($("total").textContent)+1;$("trials").textContent=Number($("trials").textContent)+1;renderHotels();$("form").reset();$("modalback").classList.remove("show");toast("Demo hotel added. Not saved to a server.")};
+document.getElementById("menuBtn").onclick = () => {
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("overlay").classList.toggle("show");
+};
+
 document.querySelectorAll("#nav button").forEach((btn) => {
   btn.onclick = () => {
     document.querySelectorAll("#nav button").forEach((b) => {
@@ -161,9 +166,9 @@ document.querySelectorAll("#nav button").forEach((btn) => {
       toast("This section is not available yet.");
     }
 
-    $("#crumb").textContent = btn.innerText.trim();
-    $("#sidebar").classList.remove("open");
-    $("#overlay").classList.remove("show");
+    document.getElementById("crumb").textContent = btn.innerText.trim();
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("overlay").classList.remove("show");
   };
 });
  $("viewAll").onclick=()=>{document.querySelector('[data-page="hotels"]').click()};$("help").onclick=()=>toast("ATITHIQ Phase 1 prototype. Help centre is planned for a later phase.");
