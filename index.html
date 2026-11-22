@@ -149,8 +149,7 @@ document.querySelectorAll("#nav button").forEach(btn=>{
       target.style.display="block";
     }else{
       document.getElementById("overviewPage").style.display="block";
-      toast(btn.innerText.trim()+" module will be built in the next phase.");
-    }
+toast("This section is not available yet.");
     $("crumb").textContent=btn.innerText.trim();
     $("sidebar").classList.remove("open");
     $("overlay").classList.remove("show");
