@@ -166,7 +166,8 @@ document.querySelectorAll("#nav button").forEach((btn) => {
       toast("This section is not available yet.");
     }
 
-    document.getElementById("crumb").textContent = btn.innerText.trim();
+    const crumb = document.getElementById("crumb");
+if (crumb) crumb.textContent = btn.innerText.trim();
     document.getElementById("sidebar").classList.remove("open");
     document.getElementById("overlay").classList.remove("show");
   };
