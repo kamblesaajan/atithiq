@@ -47,7 +47,7 @@ text-align:left;font-size:13px;cursor:pointer;">
 <div class="mobileoverlay" id="overlay"></div>
 <main class="main">
 <header class="topbar"><div style="display:flex;align-items:center;gap:11px"><button class="menuBtn" id="menuBtn" aria-label="Open menu">☰</button><div class="crumb">ATITHIQ <span style="color:#c4cbd4">/</span> <b id="crumb">Overview</b></div></div><div class="actions"><select class="lang" id="lang" aria-label="Language"><option value="en">English</option><option value="mr">मराठी</option><option value="hi">हिन्दी</option></select><button class="ghost" id="help">? <span data-t="help">Help</span></button><div class="avatar">SA</div></div></header>
-<section class="content">
+<section class="content" id="overviewPage">
  <div class="heading"><div><div class="eyebrow">SUPER ADMIN CONSOLE</div><h1 data-t="welcome">Good morning, Admin</h1><div class="subtitle" data-t="subtitle">Here’s what’s happening across your hospitality network.</div></div><button class="primary" id="addHotel">＋ <span data-t="addHotel">Add New Hotel</span></button></div>
  <div class="stats">
   <div class="card stat"><div class="stathead"><span data-t="totalHotels">Total Hotels</span><span class="staticon">⌂</span></div><div class="value" id="total">128</div><div class="trend">↑ 12.8% <span data-t="vs">vs last month</span></div></div>
@@ -62,6 +62,7 @@ text-align:left;font-size:13px;cursor:pointer;">
  <div class="card tablepanel"><div class="panelhead"><div><h2 data-t="recent">Recently Added Hotels</h2><div class="muted" style="margin-top:5px" data-t="recentSub">Latest properties registered on ATITHIQ</div></div><button class="ghost" id="viewAll" data-t="viewAll">View all hotels →</button></div>
  <div class="tablewrap"><table><thead><tr><th data-t="hotelName">HOTEL NAME</th><th data-t="location">LOCATION</th><th data-t="plan">PLAN</th><th data-t="status">STATUS</th><th data-t="joined">JOINED</th><th></th></tr></thead><tbody id="hotelRows"></tbody></table></div><div class="hotelcards" id="hotelCards"></div>
  </div><div class="footer">© 2026 ATITHIQ Hospitality Cloud · UI prototype with illustrative demo data</div>
+</section>
  <section class="content" id="hotelsPage" style="display:none">
   <div class="heading">
     <div>
