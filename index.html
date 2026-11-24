@@ -183,5 +183,58 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
   });
 }
 </script>
+<section class="content" id="hotelsPage" style="display:none">
 
+  <div class="heading">
+    <div>
+      <div class="eyebrow">SUPER ADMIN CONSOLE</div>
+      <h1>Hotels Management</h1>
+      <div class="subtitle">Manage all registered hotels in ATITHIQ.</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="card stat">
+      <div class="stathead">Total Hotels</div>
+      <div class="value" id="hotelTotal">0</div>
+    </div>
+    <div class="card stat">
+      <div class="stathead">Active Hotels</div>
+      <div class="value" id="hotelActive">0</div>
+    </div>
+    <div class="card stat">
+      <div class="stathead">Trial Hotels</div>
+      <div class="value" id="hotelTrial">0</div>
+    </div>
+  </div>
+
+  <div class="card panel">
+    <div class="panelhead">
+      <h2>Registered Hotels</h2>
+      <button class="primary" id="openHotelForm">+ Add New Hotel</button>
+    </div>
+    <p id="hotelMessage">Hotel registration form is ready for setup.</p>
+    <div id="hotelForm" style="display:none">
+      <h3>New Hotel Registration</h3>
+      <label>Hotel Name</label>
+      <input id="newHotelName" placeholder="Enter hotel name">
+      <label>Owner Name</label>
+      <input id="newOwnerName" placeholder="Enter owner name">
+      <label>Email</label>
+      <input id="newHotelEmail" type="email" placeholder="Enter email">
+      <label>City</label>
+      <input id="newHotelCity" placeholder="Enter city">
+      <button type="button" class="ghost" id="closeHotelForm">Cancel</button>
+    </div>
+  </div>
+</section>
+
+<script>
+document.getElementById("openHotelForm").onclick = function() {
+  document.getElementById("hotelForm").style.display = "block";
+};
+document.getElementById("closeHotelForm").onclick = function() {
+  document.getElementById("hotelForm").style.display = "none";
+};
+</script>
 </body></html>
