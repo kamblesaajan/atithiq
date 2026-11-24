@@ -144,7 +144,7 @@ document.getElementById("menuBtn").onclick = () => {
   document.getElementById("overlay").classList.toggle("show");
 };
 
-document.querySelectorAll("#nav button").forEach((btn) => {
+document.querySelectorAll('#nav button:not(#addHotelNav)').forEach((btn) => {
   btn.onclick = () => {
     document.querySelectorAll("#nav button").forEach((b) => {
       b.classList.remove("active");
