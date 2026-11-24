@@ -134,8 +134,9 @@ function renderHotels(){$("hotelRows").replaceChildren();$("hotelCards").replace
 let card=document.createElement("div");card.className="hotelcard";let top=document.createElement("div");top.className="hotelcardtop";let hinfo=wrap.cloneNode(true);let sb=document.createElement("span");sb.className="status "+h.status.toLowerCase();sb.textContent=h.status;top.append(hinfo,sb);let meta=document.createElement("div");meta.className="hotelcardmeta";[[t("location"),h.location],[t("plan"),h.plan],[t("joined"),h.joined],["ID",h.id]].forEach(([label,value])=>{let m=document.createElement("div");m.className="meta";let l=document.createElement("label"),v=document.createElement("b");l.textContent=label;v.textContent=value;m.append(l,v);meta.append(m)});card.append(top,meta);$("hotelCards").append(card)})}
 function applyLang(){document.documentElement.lang=lang;document.querySelectorAll("[data-t]").forEach(el=>{let k=el.dataset.t;el.textContent=t(k)});$("crumb").textContent=t("overview");renderHotels()}
 $("lang").onchange=e=>{lang=e.target.value;applyLang()};
-$("addHotelNav").onclick=()=>{
+$("addHotelNav").onclick = () => {
   document.querySelector('[data-page="hotels"]').click();
+  document.getElementById("modalback").classList.add("show");
 };
 $("form").onsubmit=e=>{e.preventDefault();let name=$("hotelInput").value.trim(),city=$("cityInput").value.trim();if(!name||!city)return;hotels.unshift({name,id:"DEMO-"+String(hotels.length+1).padStart(3,"0"),location:city,plan:$("planInput").value,status:"Trial",joined:t("joinedToday"),initial:name.charAt(0).toUpperCase()});$("total").textContent=Number($("total").textContent)+1;$("trials").textContent=Number($("trials").textContent)+1;renderHotels();$("form").reset();$("modalback").classList.remove("show");toast("Demo hotel added. Not saved to a server.")};
 document.getElementById("menuBtn").onclick = () => {
