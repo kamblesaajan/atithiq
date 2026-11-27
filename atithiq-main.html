@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ATITHIQ | Hospitality Cloud</title>
+<style>
+:root{
+ --bg:#0b1120;--panel:#121b2d;--panel2:#172238;
+ --gold:#c7a46b;--white:#f4f6fb;--muted:#8c9ab2;
+ --green:#35c58b;--border:#25334a;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);
+ font-family:Arial,sans-serif}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:250px;background:#0d1526;padding:22px;
+ border-right:1px solid var(--border);flex-shrink:0}
+.brand{font-size:22px;font-weight:bold;color:var(--gold)}
+.brand small{display:block;color:var(--muted);font-size:11px;
+ letter-spacing:2px;margin-top:5px}
+.navtitle{color:var(--muted);font-size:11px;margin:28px 0 10px}
+.nav button{display:block;width:100%;text-align:left;padding:12px;
+ border:0;border-radius:9px;background:none;color:#c8d2e4;
+ cursor:pointer;margin:4px 0;font-size:14px}
+.nav button:hover,.nav button.active{background:var(--panel2);color:var(--gold)}
+.subnav{padding:8px 12px 8px 32px;color:var(--gold);
+ cursor:pointer;font-size:13px;border-radius:8px}
+.subnav:hover{background:var(--panel2)}
+.main{flex:1;padding:28px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;
+ flex-wrap:wrap;gap:12px;margin-bottom:25px}
+h1{margin:0;font-size:26px}
+.muted{color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+ gap:16px;margin:20px 0}
+.card,.panel{background:var(--panel);border:1px solid var(--border);
+ border-radius:14px;padding:20px}
+.card small{color:var(--muted)}
+.number{font-size:30px;font-weight:bold;margin-top:12px}
+.gold{color:var(--gold)}
+.green{color:var(--green)}
+.btn{background:var(--gold);color:#101522;border:0;border-radius:9px;
+ padding:11px 16px;font-weight:bold;cursor:pointer}
+.btn2{background:var(--panel2);color:white;border:1px solid var(--border);
+ border-radius:9px;padding:10px 15px;cursor:pointer}
+input,select,textarea{width:100%;background:#0c1424;color:white;
+ border:1px solid var(--border);padding:12px;border-radius:9px;
+ margin:6px 0 14px;font-size:14px}
+label{font-size:13px;color:#b8c4d8}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+table{width:100%;border-collapse:collapse;margin-top:14px}
+th,td{text-align:left;padding:14px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-size:12px}
+.badge{background:#18372e;color:#6ce1ae;padding:5px 9px;
+ border-radius:20px;font-size:12px}
+.section{display:none}
+.section.active{display:block}
+#registration{display:none;margin-top:20px}
+.empty{color:var(--muted);padding:20px;text-align:center}
+@media(max-width:800px){
+ .sidebar{width:210px}
+ .main{padding:18px}
+}
+@media(max-width:600px){
+ .layout{display:block}
+ .sidebar{width:100%;border-right:0}
+ .main{padding:14px}
+ .grid2{grid-template-columns:1fr}
+ table{font-size:12px}
+ th,td{padding:9px 5px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+ <div class="brand">ATITHIQ<small>HOSPITALITY CLOUD</small></div>
+
+ <div class="navtitle">WORKSPACE</div>
+ <nav class="nav" id="nav">
+  <button class="active" data-section="overview">▦ &nbsp; Overview</button>
+  <button data-section="hotels">▣ &nbsp; Hotels</button>
+  <div class="subnav" id="addNav">＋ Add New Hotel</div>
+  <button data-section="subscriptions">◈ &nbsp; Subscriptions</button>
+  <button data-section="payments">₹ &nbsp; Payments</button>
+  <div class="navtitle">MANAGEMENT</div>
+  <button data-section="users">♙ &nbsp; Users & Roles</button>
+  <button data-section="reports">▤ &nbsp; Reports</button>
+  <button data-section="settings">⚙️ &nbsp; Settings</button>
+ </nav>
+
+ <div style="margin-top:30px">
+  <label>Language</label>
+  <select id="language">
+   <option value="en">English</option>
+   <option value="mr">मराठी</option>
+   <option value="hi">हिन्दी</option>
+  </select>
+ </div>
+</aside>
+
+<main class="main">
+
+<section class="section active" id="overview">
+ <div class="top">
+  <div><h1>Overview</h1>
+   <p class="muted">ATITHIQ SaaS Management Dashboard</p></div>
+ </div>
+
+ <div class="cards">
+  <div class="card"><small>Total Hotels</small>
+   <div class="number gold" id="total">0</div></div>
+  <div class="card"><small>Active Hotels</small>
+   <div class="number green" id="active">0</div></div>
+  <div class="card"><small>Trial Hotels</small>
+   <div class="number" id="trial">0</div></div>
+  <div class="card"><small>Pending Approval</small>
+   <div class="number" id="pending">0</div></div>
+ </div>
+
+ <div class="panel">
+  <h3>Welcome to ATITHIQ</h3>
+  <p class="muted">Your hotel and restaurant SaaS control centre.</p>
+  <button class="btn2" onclick="openHotels()">Manage Hotels</button>
+ </div>
+</section>
+
+<section class="section" id="hotels">
+ <div class="top">
+  <div><h1>Hotels Management</h1>
+   <p class="muted">Manage registered properties</p></div>
+ </div>
+
+ <div class="cards">
+  <div class="card"><small>Total Hotels</small>
+   <div class="number gold" id="htotal">0</div></div>
+  <div class="card"><small>Active</small>
+   <div class="number green" id="hactive">0</div></div>
+  <div class="card"><small>Trial</small>
+   <div class="number" id="htrial">0</div></div>
+ </div>
+
+ <div class="panel">
+  <div class="top">
+   <h3>Registered Hotels</h3>
+   <button class="btn2" onclick="showRegistration()">＋ Add New Hotel</button>
+  </div>
+  <input id="search" placeholder="Search hotel name or city..."
+   oninput="renderHotels()">
+  <div style="overflow-x:auto">
+   <table>
+    <thead><tr><th>Hotel</th><th>City</th><th>Plan</th><th>Status</th></tr></thead>
+    <tbody id="hotelRows"></tbody>
+   </table>
+  </div>
+ </div>
+
+ <div class="panel" id="registration">
+  <h3>＋ New Hotel Registration</h3>
+  <p class="muted">Enter hotel details below</p>
+
+  <form id="hotelForm">
+   <div class="grid2">
+    <div><label>Hotel / Restaurant Name *</label>
+     <input id="hotelName" required></div>
+    <div><label>Owner Name *</label>
+     <input id="ownerName" required></div>
+    <div><label>Email *</label>
+     <input id="email" type="email" required></div>
+    <div><label>Mobile Number *</label>
+     <input id="mobile" type="tel" required></div>
+    <div><label>City *</label>
+     <input id="city" required></div>
+    <div><label>Subscription Plan</label>
+     <select id="plan"><option>Free Trial</option>
+      <option>Basic</option><option>Professional</option>
+      <option>Enterprise</option></select></div>
+   </div>
+   <label>Full Address</label>
+   <textarea id="address" rows="3"></textarea>
+   <p class="muted">Trial period: 30 days after approval.</p>
+   <button class="btn" type="submit">Save Registration</button>
+   <button class="btn2" type="button" onclick="hideRegistration()">Cancel</button>
+  </form>
+ </div>
+</section>
+
+<section class="section" id="subscriptions">
+ <h1>Subscriptions</h1><div class="panel">
+ <p class="muted">Subscription management module.</p></div>
+</section>
+
+<section class="section" id="payments">
+ <h1>Payments</h1><div class="panel">
+ <p class="muted">Payment management module.</p></div>
+</section>
+
+<section class="section" id="users">
+ <h1>Users & Roles</h1><div class="panel">
+ <p class="muted">User access management module.</p></div>
+</section>
+
+<section class="section" id="reports">
+ <h1>Reports</h1><div class="panel">
+ <p class="muted">Reports module.</p></div>
+</section>
+
+<section class="section" id="settings">
+ <h1>Settings</h1><div class="panel">
+ <p class="muted">System settings module.</p></div>
+</section>
+
+</main>
+</div>
+
+<script>
+let hotels=[];
+
+function switchSection(name){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.querySelectorAll("#nav button").forEach(b=>b.classList.remove("active"));
+ document.getElementById(name).classList.add("active");
+ const btn=document.querySelector('#nav button[data-section="'+name+'"]');
+ if(btn)btn.classList.add("active");
+ hideRegistration();
+}
+
+document.querySelectorAll("#nav button").forEach(btn=>{
+ btn.onclick=()=>switchSection(btn.dataset.section);
+});
+
+function openHotels(){switchSection("hotels")}
+
+document.getElementById("addNav").onclick=()=>{
+ switchSection("hotels");
+ showRegistration();
+};
+
+function showRegistration(){
+ switchSection("hotels");
+ document.getElementById("registration").style.display="block";
+ document.getElementById("registration").scrollIntoView({behavior:"smooth"});
+}
+function hideRegistration(){
+ document.getElementById("registration").style.display="none";
+}
+
+function renderHotels(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const filtered=hotels.filter(h=>
+  h.name.toLowerCase().includes(q)||h.city.toLowerCase().includes(q));
+ const rows=document.getElementById("hotelRows");
+ rows.innerHTML="";
+ if(!filtered.length){
+  rows.innerHTML='<tr><td colspan="4" class="empty">No hotels added yet.</td></tr>';
+ }
+ filtered.forEach(h=>{
+  rows.innerHTML+=`<tr>
+   <td>${escapeHtml(h.name)}</td>
+   <td>${escapeHtml(h.city)}</td>
+   <td>${escapeHtml(h.plan)}</td>
+   <td><span class="badge">${escapeHtml(h.status)}</span></td>
+  </tr>`;
+ });
+}
+
+function escapeHtml(s){
+ return String(s).replace(/[&<>"']/g,m=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[m]));
+}
+
+function updateStats(){
+ document.getElementById("total").textContent=hotels.length;
+ document.getElementById("htotal").textContent=hotels.length;
+ const active=hotels.filter(h=>h.status==="Active").length;
+ const trial=hotels.filter(h=>h.plan==="Free Trial").length;
+ document.getElementById("active").textContent=active;
+ document.getElementById("hactive").textContent=active;
+ document.getElementById("trial").textContent=trial;
+ document.getElementById("htrial").textContent=trial;
+ document.getElementById("pending").textContent=0;
+ renderHotels();
+}
+
+document.getElementById("hotelForm").onsubmit=e=>{
+ e.preventDefault();
+ alert("This prototype does not save registrations to Firebase yet. A secure backend is required.");
+};
+
+const translations={
+ en:{overview:"Overview",hotels:"Hotels",subscriptions:"Subscriptions",payments:"Payments",users:"Users & Roles",reports:"Reports",settings:"Settings"},
+ mr:{overview:"आढावा",hotels:"हॉटेल्स",subscriptions:"सदस्यता",payments:"पेमेंट",users:"वापरकर्ते",reports:"अहवाल",settings:"सेटिंग्स"},
+ hi:{overview:"अवलोकन",hotels:"होटल",subscriptions:"सदस्यता",payments:"भुगतान",users:"उपयोगकर्ता",reports:"रिपोर्ट",settings:"सेटिंग"}
+};
+
+document.getElementById("language").onchange=e=>{
+ const t=translations[e.target.value];
+ document.querySelectorAll("[data-section]").forEach(b=>{
+  const key=b.dataset.section;
+  const icon=b.innerText.split(" ")[0];
+  b.innerHTML=icon+" &nbsp; "+t[key];
+ });
+};
+
+updateStats();
+</script>
+</body>
+</html>
